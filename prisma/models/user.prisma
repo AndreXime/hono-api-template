@@ -1,0 +1,29 @@
+model User {
+  id           String  @id @unique @default(uuid(7)) @db.Uuid
+  email        String  @unique
+  password     String
+  name         String
+
+  notifications UserNotification[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model UserNotification {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  message   String
+  read      Boolean  @default(false)
+  link      String?
+  
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId String   @db.Uuid
+  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade) 
+
+  @@index([userId])
+  @@map("notifications")
+}
+
