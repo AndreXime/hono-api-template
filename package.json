@@ -1,0 +1,24 @@
+{
+	"name": "ecommerce-backend",
+	"scripts": {
+		"dev": "bun run --hot src/index.ts",
+		"build": "bun build src/index.ts --compile --outfile serve",
+		"prepare": "husky"
+	},
+	"dependencies": {
+		"@hono/zod-validator": "^0.7.6",
+		"@prisma/adapter-pg": "^7.1.0",
+		"@prisma/client": "^7.2.0",
+		"dotenv": "^17.2.3",
+		"hono": "^4.11.7",
+		"pg": "^8.16.3",
+		"zod": "^4.3.6"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.3.14",
+		"@types/pg": "^8.15.6",
+		"@types/bun": "latest",
+		"husky": "^9.1.7",
+		"prisma": "^7.2.0"
+	}
+}
