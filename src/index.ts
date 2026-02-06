@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { csrf } from "hono/csrf";
 import type { AppBindings } from "@/@types/declarations";
 import { registerRoutes } from "@/modules";
 import { PrismaDatabase } from "./database/database";
@@ -20,6 +21,11 @@ if (environment.ENV === "DEV") {
 
 server.use(cors);
 server.use(database);
+server.use(
+	csrf({
+		origin: [environment.FRONTEND_URL],
+	}),
+);
 
 // 100 requisições a cada 15 minutos por IP
 server.use(rateLimiter(100, 15, "global"));
