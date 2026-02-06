@@ -2,7 +2,7 @@ import type { MiddlewareHandler } from "hono";
 import { getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
 import type { AppBindings, JWT } from "@/@types/declarations";
-import { environment } from "@/lib/environment";
+import environment from "@/lib/environment";
 
 const auth = (): MiddlewareHandler<AppBindings> => {
 	return async (ctx, next) => {
@@ -37,4 +37,4 @@ const auth = (): MiddlewareHandler<AppBindings> => {
 	};
 };
 
-export { auth };
+export default auth;

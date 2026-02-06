@@ -1,7 +1,7 @@
 import type { MiddlewareHandler } from "hono";
 import type { AppBindings } from "@/@types/declarations";
 
-export const requestLogger: MiddlewareHandler<AppBindings> = async (ctx, next) => {
+const requestLogger: MiddlewareHandler<AppBindings> = async (ctx, next) => {
 	const { method, url } = ctx.req;
 	const startTime = Date.now();
 
@@ -45,3 +45,5 @@ export const requestLogger: MiddlewareHandler<AppBindings> = async (ctx, next) =
 		console.log(responseBody);
 	}
 };
+
+export default requestLogger;

@@ -16,7 +16,7 @@ Target validos:
 /**
  * De acordo com um target da requisição, valida usando um schema Zod
  */
-export const zValidator = <T extends ZodSchema, Target extends keyof ValidationTargets>(target: Target, schema: T) =>
+const zValidator = <T extends ZodSchema, Target extends keyof ValidationTargets>(target: Target, schema: T) =>
 	zv(target, schema, (result, ctx) => {
 		if (!result.success) {
 			// Sempre retorna um array para o front-end saber o que esperar
@@ -28,3 +28,5 @@ export const zValidator = <T extends ZodSchema, Target extends keyof ValidationT
 			return ctx.json({ errors: errorResponse }, 400);
 		}
 	});
+
+export default zValidator;

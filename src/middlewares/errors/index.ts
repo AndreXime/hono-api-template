@@ -31,4 +31,4 @@ const errors: ErrorHandler<AppBindings> = async (error, { json }) => {
 	return json<ErrorResponse>(response, status);
 };
 
-export { errors };
+export default errors;

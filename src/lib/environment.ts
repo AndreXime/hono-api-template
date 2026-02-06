@@ -48,5 +48,5 @@ const SchemaEnvironment = z.object({
 // Impede de rodar o servidor sem alguma variavel de ambiente
 const environment = SchemaEnvironment.parse(Bun.env);
 
-export { environment };
+export default environment;
 export type environmentType = typeof environment;

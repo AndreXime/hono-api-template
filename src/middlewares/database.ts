@@ -9,4 +9,4 @@ const database: MiddlewareHandler<AppBindings> = async (ctx, next) => {
 	return await next();
 };
 
-export { database };
+export default database;
