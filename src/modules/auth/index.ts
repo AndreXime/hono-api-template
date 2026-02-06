@@ -1,7 +1,7 @@
 import rateLimiter from "@/middlewares/rate-limiter";
-import { registerRoutesMe } from "../user/me/me.controller";
 import { registerRoutesSignIn } from "./login/login.controller";
 import { registerRoutesLogout } from "./logout/logout.controller";
+import { registerRoutesRefresh } from "./refresh/refresh.controller";
 import { registerRoutesSignUp } from "./register/register.controller";
 
 const registerRoutesAuth = (server: ServerType) => {
@@ -14,7 +14,7 @@ const registerRoutesAuth = (server: ServerType) => {
 	registerRoutesSignIn(app);
 	registerRoutesSignUp(app);
 	registerRoutesLogout(app);
-	registerRoutesMe(app);
+	registerRoutesRefresh(app);
 };
 
 export { registerRoutesAuth };

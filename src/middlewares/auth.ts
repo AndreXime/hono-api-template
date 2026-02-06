@@ -14,7 +14,7 @@ const auth = (): MiddlewareHandler<AppBindings> => {
 		}
 
 		if (!token) {
-			token = getCookie(ctx, "token");
+			token = getCookie(ctx, "accessToken");
 		}
 
 		if (!token) {

@@ -1,5 +1,3 @@
-// src/modules/auth/schemas/sign-up.ts
-
 import { z } from "zod";
 import { SchemaEmail, SchemaName, SchemaPassword } from "@/modules/shared/schemas/user";
 

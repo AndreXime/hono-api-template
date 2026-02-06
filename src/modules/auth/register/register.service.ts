@@ -1,8 +1,7 @@
 import { HTTPException } from "hono/http-exception";
-import { sign } from "hono/jwt";
 import { database } from "@/database/database";
-import environment from "@/lib/environment";
-import { hashPassword } from "@/modules/shared/lib/hash";
+import { hashPassword } from "@/modules/auth/shared/hash";
+import { generateAuthTokens } from "../shared/tokens";
 import type { RegisterUserSchema } from "./register.schema";
 
 async function signUp(data: RegisterUserSchema) {
@@ -25,21 +24,7 @@ async function signUp(data: RegisterUserSchema) {
 		},
 	});
 
-	const now = Math.floor(Date.now() / 1000);
-
-	const token = await sign(
-		{
-			id: user.id,
-			email: user.email,
-			name: user.name,
-			iat: now,
-			exp: now + environment.JWT_EXPIRATION,
-		},
-		process.env.JWT_SECRET as string,
-		"HS256",
-	);
-
-	return token;
+	return await generateAuthTokens(user.id, user.email, user.name);
 }
 
 export { signUp };

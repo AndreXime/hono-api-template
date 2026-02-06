@@ -1,8 +1,7 @@
 import { HTTPException } from "hono/http-exception";
-import { sign } from "hono/jwt";
 import { database } from "@/database/database";
-import environment from "@/lib/environment";
-import { verifyPassword } from "@/modules/shared/lib/hash";
+import { verifyPassword } from "@/modules/auth/shared/hash";
+import { generateAuthTokens } from "../shared/tokens";
 import type { UserSignIn } from "./login.schema";
 
 async function signIn({ email, password }: UserSignIn) {
@@ -26,21 +25,7 @@ async function signIn({ email, password }: UserSignIn) {
 		});
 	}
 
-	const now = Math.floor(Date.now() / 1000);
-
-	const token = await sign(
-		{
-			id: user.id,
-			email: user.email,
-			name: user.name,
-			iat: now,
-			exp: now + environment.JWT_EXPIRATION,
-		},
-		process.env.JWT_SECRET as string,
-		"HS256",
-	);
-
-	return token;
+	return await generateAuthTokens(user.id, user.email, user.name);
 }
 
 export { signIn };

@@ -8,15 +8,23 @@ const SchemaEnvironment = z.object({
 			/^[A-Za-z0-9+/]{43}=$/,
 			"JWT_SECRET must be a 32-byte base64 encoded string (e.g. from openssl rand -base64 32)",
 		),
-	JWT_EXPIRATION: z
+	JWT_ACCESS_EXPIRATION: z
 		.string()
 		.regex(/^\d+m$/, {
 			message: "O tempo de expiração deve estar no formato 'Xm' (ex: 15m)",
 		})
 		.transform((val) => {
-			// Transforma em segundos
 			const minutes = parseInt(val.replace("m", ""), 10);
-			return minutes * 60;
+			return minutes * 60; // Minutos em segundos
+		}),
+	JWT_REFRESH_EXPIRATION: z
+		.string()
+		.regex(/^\d+d$/, {
+			message: "O tempo de expiração deve estar no formato 'Xd' (ex: 15d)",
+		})
+		.transform((val) => {
+			const days = parseInt(val.replace("d", ""), 10);
+			return days * 24 * 60 * 60; // Dias em segundos
 		}),
 	ENV: z
 		.string()
