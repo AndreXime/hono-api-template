@@ -35,6 +35,7 @@ const SchemaEnvironment = z.object({
 		})
 		.default("DEV" as const),
 	DATABASE_URL: z.url("DATABASE_URL must be a valid URL"),
+	REDIS_URL: z.url(),
 	FRONTEND_URL: z.url("FRONTEND_URL must be a valid URL").default("http://localhost:3000"),
 
 	// --- Variáveis AWS S3 (Storage) ---
