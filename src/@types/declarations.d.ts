@@ -1,6 +1,6 @@
 import type { Database } from "@/database/database";
-import type { environmentType } from "@/lib/environment";
 import type server from "@/index";
+import type { environmentType } from "@/lib/environment";
 
 declare global {
 	type ServerType = typeof server;
@@ -18,6 +18,8 @@ type JWT = {
 	id: string;
 	email: string;
 	name: string;
+	jti: string;
+	exp: number;
 };
 
 declare module "hono" {

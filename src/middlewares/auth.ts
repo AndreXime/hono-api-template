@@ -1,8 +1,9 @@
 import type { MiddlewareHandler } from "hono";
-import { getCookie } from "hono/cookie";
+import { deleteCookie, getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
 import type { AppBindings, JWT } from "@/@types/declarations";
 import environment from "@/lib/environment";
+import blocklist from "@/modules/auth/shared/blocklist";
 
 const auth = (): MiddlewareHandler<AppBindings> => {
 	return async (ctx, next) => {
@@ -26,6 +27,14 @@ const auth = (): MiddlewareHandler<AppBindings> => {
 
 			if (!userPayload) {
 				return ctx.json({ message: "Token invalido ou expirado" }, 401);
+			}
+
+			if (userPayload.jti) {
+				const isBlocked = await blocklist.isBlocked(userPayload.jti);
+				if (isBlocked) {
+					deleteCookie(ctx, "accessToken");
+					return ctx.json({ message: "Token revogado. Faça login novamente." }, 401);
+				}
 			}
 
 			ctx.set("user", userPayload);

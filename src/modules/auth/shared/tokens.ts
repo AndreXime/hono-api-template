@@ -7,12 +7,14 @@ import { hashToken } from "@/modules/auth/shared/hash";
 
 export async function generateAuthTokens(userId: string, email: string, name: string) {
 	const now = Math.floor(Date.now() / 1000);
+	const jti = crypto.randomUUID();
 
 	const accessToken = await sign(
 		{
 			id: userId,
 			email,
 			name,
+			jti,
 			type: "access",
 			iat: now,
 			exp: now + environment.JWT_ACCESS_EXPIRATION,
