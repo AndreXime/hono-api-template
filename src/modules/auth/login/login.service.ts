@@ -25,9 +25,8 @@ async function signIn({ email, password }: UserSignIn) {
 		});
 	}
 
-	// Definição do tempo de expiração (7 dias em segundos, para bater com o cookie)
 	const now = Math.floor(Date.now() / 1000);
-	const expiresIn = 60 * 60 * 24 * 7; // 7 dias
+	const expiresIn = 60 * 60 * 24; // 1 dia
 
 	const token = await sign(
 		{
@@ -41,9 +40,7 @@ async function signIn({ email, password }: UserSignIn) {
 		"HS256",
 	);
 
-	return {
-		token,
-	};
+	return token;
 }
 
 export { signIn };

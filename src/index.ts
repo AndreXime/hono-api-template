@@ -10,9 +10,7 @@ import database from "./middlewares/database";
 import errors from "./middlewares/errors";
 import requestLogger from "./middlewares/logger";
 
-const server = new Hono<AppBindings>({
-	strict: false,
-});
+const server = new Hono<AppBindings>();
 
 if (environment.ENV === "DEV") {
 	server.use(requestLogger);

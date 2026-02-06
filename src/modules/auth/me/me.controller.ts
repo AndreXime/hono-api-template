@@ -1,7 +1,7 @@
-import { auth } from "@/middlewares/auth";
+import auth from "@/middlewares/auth";
 
 export const registerRoutesMe = (server: ServerType) => {
-	server.get("/me/detailed", auth(), async (ctx) => {
+	server.get("/me", auth(), async (ctx) => {
 		const currentUser = ctx.get("user");
 
 		const user = await ctx.database.user.findUnique({

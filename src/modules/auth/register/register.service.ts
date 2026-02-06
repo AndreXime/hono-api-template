@@ -1,4 +1,5 @@
 import { HTTPException } from "hono/http-exception";
+import { sign } from "hono/jwt";
 import { database } from "@/database/database";
 import { hashPassword } from "@/modules/shared/lib/hash";
 import type { RegisterUserSchema } from "./register.schema";
@@ -15,17 +16,30 @@ async function signUp(data: RegisterUserSchema) {
 
 	const passwordHash = await hashPassword(data.password);
 
-	await database.$transaction(async (transaction) => {
-		const user = await transaction.user.create({
-			data: {
-				name: data.name,
-				email: data.email,
-				password: passwordHash,
-			},
-		});
-
-		return user;
+	const user = await database.user.create({
+		data: {
+			name: data.name,
+			email: data.email,
+			password: passwordHash,
+		},
 	});
+
+	const now = Math.floor(Date.now() / 1000);
+	const expiresIn = 60 * 60 * 24; // 1 dia
+
+	const token = await sign(
+		{
+			id: user.id,
+			email: user.email,
+			name: user.name,
+			iat: now,
+			exp: now + expiresIn,
+		},
+		process.env.JWT_SECRET as string,
+		"HS256",
+	);
+
+	return token;
 }
 
 export { signUp };

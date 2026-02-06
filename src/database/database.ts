@@ -3,7 +3,7 @@ import { spawn } from "bun";
 import { Pool } from "pg";
 import { PrismaClient } from "prisma";
 import { log } from "@/lib/dev";
-import { environment } from "@/lib/environment";
+import environment from "@/lib/environment";
 
 class PrismaService {
 	private client: PrismaClient | null = null;
