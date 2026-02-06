@@ -1,6 +1,7 @@
 import { HTTPException } from "hono/http-exception";
 import { sign } from "hono/jwt";
 import { database } from "@/database/database";
+import environment from "@/lib/environment";
 import { hashPassword } from "@/modules/shared/lib/hash";
 import type { RegisterUserSchema } from "./register.schema";
 
@@ -25,7 +26,6 @@ async function signUp(data: RegisterUserSchema) {
 	});
 
 	const now = Math.floor(Date.now() / 1000);
-	const expiresIn = 60 * 60 * 24; // 1 dia
 
 	const token = await sign(
 		{
@@ -33,7 +33,7 @@ async function signUp(data: RegisterUserSchema) {
 			email: user.email,
 			name: user.name,
 			iat: now,
-			exp: now + expiresIn,
+			exp: now + environment.JWT_EXPIRATION,
 		},
 		process.env.JWT_SECRET as string,
 		"HS256",

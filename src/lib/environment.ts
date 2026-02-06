@@ -1,13 +1,23 @@
 import { z } from "zod";
 
 const SchemaEnvironment = z.object({
+	PORT: z.coerce.number().default(8080),
 	JWT_SECRET: z
 		.string()
 		.regex(
 			/^[A-Za-z0-9+/]{43}=$/,
 			"JWT_SECRET must be a 32-byte base64 encoded string (e.g. from openssl rand -base64 32)",
 		),
-	PORT: z.coerce.number().default(8080),
+	JWT_EXPIRATION: z
+		.string()
+		.regex(/^\d+m$/, {
+			message: "O tempo de expiração deve estar no formato 'Xm' (ex: 15m)",
+		})
+		.transform((val) => {
+			// Transforma em segundos
+			const minutes = parseInt(val.replace("m", ""), 10);
+			return minutes * 60;
+		}),
 	ENV: z
 		.string()
 		.toUpperCase()
