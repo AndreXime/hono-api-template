@@ -1,3 +1,4 @@
+import { Scalar } from "@scalar/hono-api-reference";
 import { inspectRoutes } from "hono/dev";
 
 const CORES_ANSI = {
@@ -12,21 +13,47 @@ export function log(message: string, cor: keyof typeof CORES_ANSI) {
 	console.log(CORES_ANSI[cor] + message + CORES_ANSI.reset);
 }
 
-function getPrefix(path: string): string {
-	const parts = path.split("/").filter((p) => p.length > 0 && !p.startsWith(":"));
+export function setupDocs(server: ServerType) {
+	server.doc("/doc", {
+		openapi: "3.0.0",
+		info: {
+			version: "1.0.0",
+			title: "Ecommerce API - Andre OS",
+			description: "Documentação automática via Hono OpenAPI",
+		},
+	});
 
-	if (parts.length === 0) return "/";
-
-	return `/${parts[0]}`;
+	server.get(
+		"/ui",
+		Scalar({
+			pageTitle: "Documentação da API Ecommerce",
+			theme: "moon",
+			url: "/doc",
+			layout: "classic",
+			hideSearch: true,
+			showDeveloperTools: "never",
+			hideDarkModeToggle: true,
+		}),
+	);
 }
 
 export function showRoutes(app: ServerType) {
 	const routes = inspectRoutes(app);
 
+	const getPrefix = (path: string): string => {
+		const parts = path.split("/").filter((p) => p.length > 0 && !p.startsWith(":"));
+
+		if (parts.length === 0) return "/";
+
+		return `/${parts[0]}`;
+	};
+
 	const LARGURA_METODO = 8;
 	const LARGURA_CAMINHO = 59;
 	let prefixoAnterior = "";
+
 	log("Rotas registradas na API:\n ", "success");
+
 	routes
 		.filter((r) => !r.isMiddleware)
 		.forEach((rota) => {

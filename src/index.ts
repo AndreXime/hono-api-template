@@ -1,10 +1,9 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
-import { Scalar } from "@scalar/hono-api-reference";
 import { csrf } from "hono/csrf";
 import type { AppBindings } from "@/@types/declarations";
 import { registerRoutes } from "@/modules";
 import { PrismaDatabase } from "./database/database";
-import { log, showRoutes } from "./lib/dev";
+import { log, setupDocs, showRoutes } from "./lib/dev";
 import environment from "./lib/environment";
 import redis from "./lib/redis";
 import storage from "./lib/storage";
@@ -36,28 +35,7 @@ registerRoutes(server);
 
 if (environment.ENV === "DEV") {
 	showRoutes(server);
-
-	server.doc("/doc", {
-		openapi: "3.0.0",
-		info: {
-			version: "1.0.0",
-			title: "Ecommerce API - Andre OS",
-			description: "Documentação automática via Hono OpenAPI",
-		},
-	});
-
-	server.get(
-		"/ui",
-		Scalar({
-			pageTitle: "Documentação da API Ecommerce",
-			theme: "moon",
-			url: "/doc",
-			layout: "classic",
-			hideSearch: true,
-			showDeveloperTools: "never",
-			hideDarkModeToggle: true,
-		}),
-	);
+	setupDocs(server);
 
 	log("Documentação OpenAPI disponível em /ui", "info");
 }
