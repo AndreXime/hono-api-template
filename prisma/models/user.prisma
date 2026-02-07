@@ -4,6 +4,8 @@ model User {
   password     String
   name         String
 
+  role      Roles   @default(CUSTOMER)
+
   notifications UserNotification[]
   refreshTokens RefreshToken[]
 
@@ -12,6 +14,12 @@ model User {
   deletedAt DateTime? @map("deleted_at")
 
   @@map("users")
+}
+
+enum Roles {
+  ADMIN
+  CUSTOMER
+  SUPPORT
 }
 
 model RefreshToken {
