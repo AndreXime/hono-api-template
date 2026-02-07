@@ -4,15 +4,15 @@ import type { JWT } from "@/@types/declarations";
 import environment from "@/lib/environment";
 import blocklist from "../shared/blocklist";
 import { hashToken } from "../shared/hash";
+import { LogoutRoute } from "./logout.docs";
 
 export const registerRoutesLogout = (server: ServerType) => {
-	server.post("/logout", async (ctx) => {
+	server.openapi(LogoutRoute, async (ctx) => {
 		const token = getCookie(ctx, "accessToken") || ctx.req.header("Authorization")?.replace("Bearer ", "");
 
 		if (token) {
 			try {
 				const payload = (await verify(token, environment.JWT_SECRET, "HS256")) as JWT;
-
 				if (payload.jti && payload.exp) {
 					await blocklist.add(payload.jti, payload.exp);
 				}
@@ -23,9 +23,7 @@ export const registerRoutesLogout = (server: ServerType) => {
 		if (refreshToken) {
 			try {
 				const hashedToken = hashToken(refreshToken);
-				await ctx.database.refreshToken.delete({
-					where: { hashedToken },
-				});
+				await ctx.database.refreshToken.delete({ where: { hashedToken } });
 			} catch {}
 		}
 

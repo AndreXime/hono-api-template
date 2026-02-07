@@ -1,4 +1,5 @@
-import { Hono } from "hono";
+import { OpenAPIHono } from "@hono/zod-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
 import { csrf } from "hono/csrf";
 import type { AppBindings } from "@/@types/declarations";
 import { registerRoutes } from "@/modules";
@@ -13,7 +14,7 @@ import errors from "./middlewares/errors";
 import requestLogger from "./middlewares/logger";
 import rateLimiter from "./middlewares/rate-limiter";
 
-const server = new Hono<AppBindings>();
+const server = new OpenAPIHono<AppBindings>();
 
 if (environment.ENV === "DEV") {
 	server.use(requestLogger);
@@ -33,11 +34,35 @@ server.use(rateLimiter(100, 15, "global"));
 server.onError(errors);
 registerRoutes(server);
 
-server.notFound((c) => c.json({ message: "Rota não econtrada" }, 404));
-
 if (environment.ENV === "DEV") {
 	showRoutes(server);
+
+	server.doc("/doc", {
+		openapi: "3.0.0",
+		info: {
+			version: "1.0.0",
+			title: "Ecommerce API - Andre OS",
+			description: "Documentação automática via Hono OpenAPI",
+		},
+	});
+
+	server.get(
+		"/ui",
+		Scalar({
+			pageTitle: "Documentação da API Ecommerce",
+			theme: "moon",
+			url: "/doc",
+			layout: "classic",
+			hideSearch: true,
+			showDeveloperTools: "never",
+			hideDarkModeToggle: true,
+		}),
+	);
+
+	log("Documentação OpenAPI disponível em /ui", "info");
 }
+
+server.notFound((c) => c.json({ message: "Rota não econtrada" }, 404));
 
 log(`Iniciando servidor no modo: ${environment.ENV}`, "info");
 await storage.testConnection();

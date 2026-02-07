@@ -1,10 +1,11 @@
 import { getCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import { setAuthCookies } from "../shared/tokens";
+import { RefreshRoute } from "./refresh.docs";
 import { generateRefreshTokens } from "./refresh.service";
 
 export const registerRoutesRefresh = (server: ServerType) => {
-	server.post("/refresh", async (ctx) => {
+	server.openapi(RefreshRoute, async (ctx) => {
 		const refreshTokenRaw = getCookie(ctx, "refreshToken");
 
 		if (!refreshTokenRaw) {
@@ -15,6 +16,6 @@ export const registerRoutesRefresh = (server: ServerType) => {
 
 		setAuthCookies(ctx, accessToken, refreshToken);
 
-		return ctx.json({ message: "Sessão renovada com sucesso" });
+		return ctx.json({ message: "Sessão renovada com sucesso" }, 200);
 	});
 };

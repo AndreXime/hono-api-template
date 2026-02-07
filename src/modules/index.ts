@@ -1,9 +1,9 @@
-import { registerRoutesAuth } from "./auth";
-import { registerRoutesUser } from "./user";
+import { createAuthRoutes } from "./auth";
+import { createRoutesUser } from "./user";
 
 const registerRoutes = (server: ServerType) => {
-	registerRoutesAuth(server);
-	registerRoutesUser(server);
+	server.route("/auth", createAuthRoutes());
+	server.route("/user", createRoutesUser());
 };
 
 export { registerRoutes };

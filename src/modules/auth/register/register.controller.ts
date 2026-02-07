@@ -1,10 +1,11 @@
-import zValidator from "@/middlewares/validator";
-import { RegisterUserSchema } from "@/modules/auth/register/register.schema";
+import type { OpenAPIHono } from "@hono/zod-openapi";
+import type { AppBindings } from "@/@types/declarations";
 import { setAuthCookies } from "../shared/tokens";
+import { RegisterRoute } from "./register.docs";
 import { signUp } from "./register.service";
 
-const registerRoutesSignUp = (server: ServerType) => {
-	server.post("/register", zValidator("json", RegisterUserSchema), async (ctx) => {
+const registerRoutesSignUp = (server: OpenAPIHono<AppBindings>) => {
+	server.openapi(RegisterRoute, async (ctx) => {
 		const validatedData = ctx.req.valid("json");
 
 		const { accessToken, refreshToken } = await signUp(validatedData);

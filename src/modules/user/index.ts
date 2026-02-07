@@ -1,9 +1,10 @@
+import createRouter from "@/lib/createRouter";
 import { registerRoutesMe } from "../user/me/me.controller";
 
-const registerRoutesUser = (server: ServerType) => {
-	const app = server.basePath("/user");
+export const createRoutesUser = () => {
+	const app = createRouter({ auth: true });
 
 	registerRoutesMe(app);
-};
 
-export { registerRoutesUser };
+	return app;
+};

@@ -1,32 +1,16 @@
-import { zValidator as zv } from "@hono/zod-validator";
+import type { Hook } from "@hono/zod-openapi";
+import type { AppBindings } from "@/@types/declarations";
 
-import type { ValidationTargets } from "hono";
-import type { ZodSchema } from "zod";
+// biome-ignore lint/suspicious/noExplicitAny: "Ele aceita qualquer objeto zod e a saida por ser qualquer coisa"
+export const zodHook: Hook<any, AppBindings, any, any> = (result, c) => {
+	if (!result.success) {
+		const errorResponse = result.error.issues.map((issue) => ({
+			param: issue.path.join("_"),
+			message: issue.message,
+		}));
 
-/*
-Target validos:
-'json': Para validar o body da requisição.
-'form': Para validar dados de um formulário (FormData).
-'query': Para validar os parâmetros de busca da URL (ex: /search?q=termo).
-'param': Para validar os parâmetros da rota (ex: /users/:id).
-'header': Para validar os cabeçalhos da requisição.
-'cookie': Para validar os cookies enviados.
-*/
+		return c.json({ errors: errorResponse }, 400);
+	}
 
-/**
- * De acordo com um target da requisição, valida usando um schema Zod
- */
-const zValidator = <T extends ZodSchema, Target extends keyof ValidationTargets>(target: Target, schema: T) =>
-	zv(target, schema, (result, ctx) => {
-		if (!result.success) {
-			// Sempre retorna um array para o front-end saber o que esperar
-			const errorResponse = result.error.issues.map((issue) => ({
-				param: issue.path.join("_"),
-				message: issue.message,
-			}));
-
-			return ctx.json({ errors: errorResponse }, 400);
-		}
-	});
-
-export default zValidator;
+	// Se success for true permite que a requisição siga.
+};

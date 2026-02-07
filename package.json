@@ -9,9 +9,11 @@
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.946.0",
 		"@aws-sdk/s3-request-presigner": "^3.946.0",
+		"@hono/zod-openapi": "^1.2.1",
 		"@hono/zod-validator": "^0.7.6",
 		"@prisma/adapter-pg": "^7.1.0",
 		"@prisma/client": "^7.2.0",
+		"@scalar/hono-api-reference": "^0.9.40",
 		"dotenv": "^17.2.3",
 		"hono": "^4.11.7",
 		"hono-rate-limiter": "^0.5.3",
