@@ -21,10 +21,11 @@ async function signUp(data: RegisterUserSchema) {
 			name: data.name,
 			email: data.email,
 			password: passwordHash,
+			role: "ADMIN",
 		},
 	});
 
-	return await generateAuthTokens(user.id, user.email, user.name);
+	return await generateAuthTokens(user.id, user.email, user.name, user.role);
 }
 
 export { signUp };

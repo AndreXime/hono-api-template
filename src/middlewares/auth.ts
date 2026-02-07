@@ -2,10 +2,11 @@ import type { MiddlewareHandler } from "hono";
 import { deleteCookie, getCookie } from "hono/cookie";
 import { verify } from "hono/jwt";
 import type { AppBindings, JWT } from "@/@types/declarations";
+import type { Roles } from "@/database/client/enums";
 import environment from "@/lib/environment";
 import blocklist from "@/modules/auth/shared/blocklist";
 
-const auth = (): MiddlewareHandler<AppBindings> => {
+export default function auth(requiredRoles: Roles[]): MiddlewareHandler<AppBindings> {
 	return async (ctx, next) => {
 		const authHeader = ctx.req.header("Authorization") || ctx.req.header("authorization");
 		let token: string | undefined;
@@ -29,6 +30,10 @@ const auth = (): MiddlewareHandler<AppBindings> => {
 				return ctx.json({ message: "Token invalido ou expirado" }, 401);
 			}
 
+			if (requiredRoles.length > 0 && !requiredRoles.includes(userPayload.role)) {
+				return ctx.json({ message: "Acesso negado: Permissão insuficiente." }, 403);
+			}
+
 			if (userPayload.jti) {
 				const isBlocked = await blocklist.isBlocked(userPayload.jti);
 				if (isBlocked) {
@@ -44,6 +49,4 @@ const auth = (): MiddlewareHandler<AppBindings> => {
 			return ctx.json({ message: "Token invalido ou expirado" }, 401);
 		}
 	};
-};
-
-export default auth;
+}

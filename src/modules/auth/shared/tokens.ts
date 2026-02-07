@@ -1,11 +1,12 @@
 import type { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
+import type { Roles } from "@/database/client/enums";
 import { database } from "@/database/database";
 import environment from "@/lib/environment";
 import { hashToken } from "@/modules/auth/shared/hash";
 
-export async function generateAuthTokens(userId: string, email: string, name: string) {
+export async function generateAuthTokens(userId: string, email: string, name: string, role: Roles) {
 	const now = Math.floor(Date.now() / 1000);
 	const jti = crypto.randomUUID();
 
@@ -15,6 +16,7 @@ export async function generateAuthTokens(userId: string, email: string, name: st
 			email,
 			name,
 			jti,
+			role,
 			type: "access",
 			iat: now,
 			exp: now + environment.JWT_ACCESS_EXPIRATION,

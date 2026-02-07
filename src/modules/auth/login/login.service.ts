@@ -25,7 +25,7 @@ async function signIn({ email, password }: UserSignIn) {
 		});
 	}
 
-	return await generateAuthTokens(user.id, user.email, user.name);
+	return await generateAuthTokens(user.id, user.email, user.name, user.role);
 }
 
 export { signIn };

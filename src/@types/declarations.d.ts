@@ -1,3 +1,4 @@
+import type { Roles } from "@/database/client/enums";
 import type { Database } from "@/database/database";
 import type server from "@/index";
 import type { environmentType } from "@/lib/environment";
@@ -18,6 +19,7 @@ type JWT = {
 	id: string;
 	email: string;
 	name: string;
+	role: Roles;
 	jti: string;
 	exp: number;
 };
