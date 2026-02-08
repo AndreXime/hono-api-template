@@ -11,18 +11,10 @@ async function signIn({ email, password }: UserSignIn) {
 		},
 	});
 
-	if (!user) {
-		throw new HTTPException(404, {
-			message: "Usuário não encontrado",
-		});
-	}
-
 	const isPasswordValid = await verifyPassword(password, user.password);
 
-	if (!isPasswordValid) {
-		throw new HTTPException(401, {
-			message: "Senha inválida",
-		});
+	if (!user || !isPasswordValid) {
+		throw new HTTPException(401, { message: "Email ou senha inválidos" });
 	}
 
 	return await generateAuthTokens(user.id, user.email, user.name, user.role);

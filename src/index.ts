@@ -1,5 +1,6 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { csrf } from "hono/csrf";
+import { secureHeaders } from "hono/secure-headers";
 import type { AppBindings } from "@/@types/declarations";
 import { registerRoutes } from "@/modules";
 import { PrismaDatabase } from "./database/database";
@@ -20,6 +21,7 @@ if (environment.ENV === "DEV") {
 	server.use(requestLogger);
 }
 
+server.use(secureHeaders());
 server.use(cors);
 server.use(database);
 server.use(
