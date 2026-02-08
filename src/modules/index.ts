@@ -3,7 +3,7 @@ import { createRoutesUser } from "./user";
 
 const registerRoutes = (server: ServerType) => {
 	server.route("/auth", createAuthRoutes());
-	server.route("/user", createRoutesUser());
+	server.route("/users", createRoutesUser());
 };
 
 export { registerRoutes };
