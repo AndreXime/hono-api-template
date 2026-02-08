@@ -1,5 +1,5 @@
 {
-	"name": "ecommerce-backend",
+	"name": "api-template",
 	"type": "module",
 	"scripts": {
 		"dev": "bun run --hot src/index.ts",

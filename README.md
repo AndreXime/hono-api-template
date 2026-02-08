@@ -1,8 +1,8 @@
-# Ecommerce Backend API
+# API Template
 
-Uma API desenvolvida para e-commerce, focada em segurança, escalabilidade e experiência do desenvolvedor (DX).
+Um template de API focado em segurança, escalabilidade e experiência do desenvolvedor (DX).
 
-Construída utilizando **Bun** e **Hono**, com **PostgreSQL** como banco de dados principal e **Redis** para cache e controle de taxa (Rate Limiting). O projeto utiliza **Prisma ORM** e segue uma arquitetura modular.
+Construído utilizando **Bun** e **Hono**, com **PostgreSQL** como banco de dados principal e **Redis** para cache e controle de taxa (Rate Limiting). O projeto utiliza **Prisma ORM** e segue uma arquitetura modular.
 
 ---
 
@@ -42,7 +42,7 @@ Quando o servidor está rodando em modo DEV, a documentação interativa (Scalar
 - Interface Visual (Scalar): http://localhost:8080/ui
 - OpenAPI JSON: http://localhost:8080/doc
 
-Principais Funcionalidades Implementadas:
+Principais Funcionalidades Implementadas no Template:
 
 - Auth: Login, Registro, Refresh Token (rotação de tokens), Logout.
 - User: Perfil do usuário logado (/me).
