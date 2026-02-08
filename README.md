@@ -1,74 +1,73 @@
-# API Template
+# Bun Hono Ecommerce Template
 
-Um template de API focado em segurança, escalabilidade e experiência do desenvolvedor (DX).
+Uma **API Template** de alto desempenho, desenvolvida com **Bun** e **Hono**. Este projeto serve como um "starter kit" completo para aplicações modernas, trazendo uma arquitetura sólida e pré-configurada com as melhores práticas de mercado.
 
-Construído utilizando **Bun** e **Hono**, com **PostgreSQL** como banco de dados principal e **Redis** para cache e controle de taxa (Rate Limiting). O projeto utiliza **Prisma ORM** e segue uma arquitetura modular.
-
----
-
-## Arquitetura e Middlewares
-
-O processamento das requisições segue um fluxo estrito de middlewares para garantir segurança, validação e observabilidade antes de atingir a lógica de negócio.
-
-**[Clique aqui para ver o Diagrama de Fluxo de Middlewares](MIDDLEWARES.md)**
-
-O diagrama acima detalha como a aplicação lida com:
-
-* Logger e tratamento de erros globais.
-* Injeção de dependência do banco de dados.
-* Rate Limiting (Global e Específico por rota).
-* Autenticação via JWT e Blocklist no Redis.
+O objetivo é fornecer uma fundação segura e escalável, integrando nativamente autenticação avançada, gestão de ficheiros, filas de processamento e base de dados, poupando semanas de configuração inicial.
 
 ---
 
-## Tecnologias
+## Funcionalidades Principais
 
-* **Runtime:** Bun
-* **Framework:** Hono
+### Autenticação e Segurança
+O sistema utiliza uma estratégia híbrida e segura para gestão de sessões:
+* **Dual Token System (JWT):** Utiliza *Access Tokens* (curta duração) e *Refresh Tokens* (longa duração) geridos via Cookies `HttpOnly` e `Secure`.
+* **Gestão de Estado de Tokens:**
+    * **Refresh Tokens no PostgreSQL:** Armazenados na base de dados para permitir a invalidação de sessões e verificar a legitimidade ao solicitar novos tokens de acesso.
+    * **Access Tokens no Redis (Blocklist):** Implementação de uma *Blocklist* para gestão de **Logout**. Quando um utilizador termina a sessão, o JTI (ID do token) é revogado no Redis até à sua expiração natural, eliminando a brecha de segurança onde um cookie ainda poderia ser válido após o logout.
+* **RBAC (Role-Based Access Control):** Middleware de controlo de acesso baseado em cargos (`ADMIN`, `CUSTOMER`, `SUPPORT`).
+* **Proteção CSRF:** Integrada nativamente.
+
+### Middlewares e Validação
+O fluxo de requisição passa por uma cadeia estrita de verificações:
+1.  **Logger:** Registo detalhado de requisições e erros.
+2.  **Global Rate Limiter:** Proteção contra abuso geral (100 req/15min).
+3.  **Strict Auth Rate Limiter:** Proteção específica para rotas de autenticação (Login/Registo) para prevenir *brute-force* (10 req/15min).
+4.  **Validação Zod:** Todos os inputs (Body, Query, Params) são validados estritamente com schemas Zod antes de atingirem os controladores.
+
+### Infraestrutura e Serviços Integrados
+* **Base de Dados:** PostgreSQL gerido via **Prisma ORM**.
+* **Cache & Performance:** Redis (via `ioredis`) utilizado para *Rate Limiting* e *Blocklist* de tokens.
+* **Armazenamento de Ficheiros (S3):** Integração com AWS S3 (simulado com **LocalStack** em desenvolvimento) para upload e download de ficheiros com URLs pré-assinados.
+* **Sistema de Filas e Email:** Processamento assíncrono com **BullMQ** (Redis) e envio de emails transacionais via **Nodemailer**.
+
+### 📚 Documentação
+* **OpenAPI 3.0:** Especificação completa da API gerada automaticamente.
+* **Scalar UI:** Interface interativa para testar e visualizar a documentação.
+
+---
+
+## 🛠️ Stack Tecnológica
+
+* **Runtime:** [Bun](https://bun.sh)
+* **Framework:** [Hono](https://hono.dev)
 * **Database:** PostgreSQL
 * **ORM:** Prisma
-* **Cache & Queue:** Redis (ioredis)
-* **Storage:** AWS S3 (Simulado via LocalStack em desenvolvimento)
-* **Validação:** Zod & Hono Zod Validator
-* **Documentação:** Scalar (OpenAPI 3.0)
-* **Linter/Formatter:** Biome
+* **Cache/Queue:** Redis
+* **Storage:** AWS S3 SDK
+* **Validation:** Zod & Hono Zod Validator
+* **Docs:** Scalar & Zod OpenAPI
+* **Tooling:** Biome (Linter/Formatter), Husky (Git Hooks)
 
 ---
 
-## Documentação da API
+## 📂 Estrutura do Projeto
 
-Quando o servidor está rodando em modo DEV, a documentação interativa (Scalar) e o JSON do OpenAPI estão disponíveis:
-
-- Interface Visual (Scalar): http://localhost:8080/ui
-- OpenAPI JSON: http://localhost:8080/doc
-
-Principais Funcionalidades Implementadas no Template:
-
-- Auth: Login, Registro, Refresh Token (rotação de tokens), Logout.
-- User: Perfil do usuário logado (/me).
-- Segurança:
-    - CSRF Protection.
-    - CORS configurado para Frontend e S3.
-    - Rate Limiter (100 req/15min global, 10 req/15min para Auth).
-
----
-
-## Estrutura de Pastas
-
+```bash
+src/
+├── @types/          # Definições de tipos globais
+├── database/        # Cliente Prisma e Seeds
+├── lib/             # Configurações de clientes (S3, Redis, Env, Queue)
+├── middlewares/     # Camadas de processamento (Auth, Logs, Rate Limit, Zod)
+├── modules/         # Lógica de negócio modular
+│   ├── auth/        # Login, Registo, Refresh, Logout, Blocklist
+│   ├── user/        # Gestão de utilizadores e perfis
+│   └── shared/      # Utilitários partilhados (Schemas, Paginação)
+└── index.ts         # Ponto de entrada da aplicação
 ```
-ecommerce-backend/
-├── src/
-│   ├── @types/          # Definições de tipos globais
-│   ├── database/        # Cliente Prisma e Seeds
-│   ├── lib/             # Configurações de libs (S3, Redis, Env)
-│   ├── middlewares/     # Middlewares (Auth, Logs, Errors, Validation)
-│   ├── modules/         # Lógica de negócio (Controllers, Services, Schemas)
-│   │   ├── auth/        # Funcionalidades de Autenticação
-│   │   ├── user/        # Funcionalidades de Usuário
-│   │   └── shared/      # Schemas e utilitários compartilhados
-│   └── index.ts         # Ponto de entrada (Entrypoint)
-├── prisma/              # Schema do banco e migrações
-├── docker-compose.yml   # Infraestrutura local
-└── MIDDLEWARES.md       # Documentação de fluxo
 
+## Testes
+
+O projeto utiliza o test runner nativo do Bun.
+```bash
+bun test
 ```

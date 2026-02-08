@@ -18,7 +18,7 @@ export function setupDocs(server: ServerType) {
 		openapi: "3.0.0",
 		info: {
 			version: "1.0.0",
-			title: "Ecommerce API - Andre OS",
+			title: "API Template - Andre OS",
 			description: "Documentação automática via Hono OpenAPI",
 		},
 	});
@@ -26,7 +26,7 @@ export function setupDocs(server: ServerType) {
 	server.get(
 		"/ui",
 		Scalar({
-			pageTitle: "Documentação da API Ecommerce",
+			pageTitle: "Documentação da API",
 			theme: "moon",
 			url: "/doc",
 			layout: "classic",

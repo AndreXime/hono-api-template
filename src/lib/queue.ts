@@ -44,7 +44,7 @@ export const setupEmailWorker = async () => {
 		"email-queue",
 		async (job) => {
 			await mailTransport.sendMail({
-				from: '"Ecommerce API" <noreply@ecommerce.com>',
+				from: '"API Template" <noreply@api.com>',
 				to: job.data.email,
 				subject: "Bem-vindo!",
 				html: `<b>Olá ${job.data.name}</b>, seja bem-vindo ao sistema!`,
