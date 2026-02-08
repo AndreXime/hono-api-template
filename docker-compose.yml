@@ -35,6 +35,15 @@ services:
     volumes:
       - redis_data:/data
 
+  mailpit:
+    image: axllent/mailpit
+    restart: always
+    ports:
+      - "1025:1025" 
+      - "8025:8025"
+    environment:
+      MP_MAX_MESSAGES: 5000
+
 volumes:
   localstack_data:
   pgdata:

@@ -1,5 +1,6 @@
 import { HTTPException } from "hono/http-exception";
 import { database } from "@/database/database";
+import { sendEmail } from "@/lib/queue";
 import { hashPassword } from "@/modules/auth/shared/hash";
 import { generateAuthTokens } from "../shared/tokens";
 import type { RegisterUserSchema } from "./register.schema";
@@ -24,6 +25,8 @@ async function signUp(data: RegisterUserSchema) {
 			role: "ADMIN",
 		},
 	});
+
+	sendEmail(user);
 
 	return await generateAuthTokens(user.id, user.email, user.name, user.role);
 }

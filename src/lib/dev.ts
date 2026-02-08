@@ -35,6 +35,8 @@ export function setupDocs(server: ServerType) {
 			hideDarkModeToggle: true,
 		}),
 	);
+
+	log("Documentação OpenAPI disponível em /ui", "info");
 }
 
 export function showRoutes(app: ServerType) {

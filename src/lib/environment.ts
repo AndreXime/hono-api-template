@@ -59,6 +59,9 @@ const SchemaEnvironment = z.object({
 	S3_REGION: z.string(),
 	S3_ACCESS_KEY: z.string(),
 	S3_SECRET_KEY: z.string(),
+
+	EMAIL_SERVICE_HOST: z.string(),
+	EMAIL_SERVICE_PORT: z.coerce.number(),
 });
 
 // Impede de rodar o servidor sem alguma variavel de ambiente

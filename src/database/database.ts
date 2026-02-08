@@ -48,7 +48,7 @@ class PrismaService {
 
 				await this.client.$connect();
 
-				log("Conexão com banco de dados estabelecida com sucesso!", "success");
+				log("Conexão com banco de dados bem-sucedida.", "success");
 				return;
 			} catch (error) {
 				retries++;

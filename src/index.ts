@@ -5,6 +5,7 @@ import { registerRoutes } from "@/modules";
 import { PrismaDatabase } from "./database/database";
 import { log, setupDocs, showRoutes } from "./lib/dev";
 import environment from "./lib/environment";
+import { setupEmailWorker } from "./lib/queue";
 import redis from "./lib/redis";
 import storage from "./lib/storage";
 import cors from "./middlewares/cors";
@@ -36,8 +37,6 @@ registerRoutes(server);
 if (environment.ENV === "DEV") {
 	showRoutes(server);
 	setupDocs(server);
-
-	log("Documentação OpenAPI disponível em /ui", "info");
 }
 
 server.notFound((c) => c.json({ message: "Rota não econtrada" }, 404));
@@ -46,5 +45,6 @@ log(`Iniciando servidor no modo: ${environment.ENV}`, "info");
 await storage.testConnection();
 await PrismaDatabase.testConnection();
 await redis.testConnection();
+await setupEmailWorker();
 
 export default server;
