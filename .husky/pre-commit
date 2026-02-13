@@ -1,5 +1,8 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# Tenta formatar e aplicar correções seguras automaticamente
+npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true .
 
-# Executa o Biome para verificar e aplicar correções seguras
-npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true
+# Adiciona APENAS os arquivos que já estavam no stage anteriormente
+git diff --name-only --cached --diff-filter=d | xargs -r git add
+
+# Verifica se ainda restam erros de lint ou formatação que não puderam ser corrigidos
+npx @biomejs/biome check .
