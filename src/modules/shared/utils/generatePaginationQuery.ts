@@ -30,7 +30,7 @@ export function getPaginationArgs<T extends string, K extends string>(
 		sortOrder: "asc" | "desc";
 		search?: string;
 	},
-	searchableFields: K[] = [], // K agora é um genérico restrito
+	searchableFields: K[] = [],
 ) {
 	const { page, limit, sortBy, sortOrder, search } = query;
 
