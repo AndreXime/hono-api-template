@@ -1,7 +1,12 @@
 import { z } from "zod";
 
-const SchemaPassword = z.string("PASSWORD must be a string").min(6, "PASSWORD must be at least 6 characters");
-const SchemaName = z.string("NAME must be a string").min(1, "NAME must be at least 1 character");
-const SchemaEmail = z.email("EMAIL must be a valid email").toLowerCase();
+export const SchemaPassword = z.string("PASSWORD must be a string").min(6, "PASSWORD must be at least 6 characters");
 
-export { SchemaPassword, SchemaEmail, SchemaName };
+export const UserSchema = z.object({
+	id: z.string().openapi({ example: "123e4567-e89b-12d3-a456-426614174000" }),
+	name: z.string().openapi({ example: "André Ximenes" }),
+	email: z.email().openapi({ example: "andre@exemplo.com" }),
+	role: z.enum(["ADMIN", "CUSTOMER", "SUPPORT"]).openapi({ example: "CUSTOMER" }),
+	createdAt: z.iso.datetime().openapi({ example: "2026-02-01T10:00:00Z" }),
+	updatedAt: z.iso.datetime().openapi({ example: "2026-02-05T15:30:00Z" }),
+});

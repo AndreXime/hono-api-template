@@ -1,13 +1,6 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute } from "@hono/zod-openapi";
 import auth from "@/middlewares/auth";
-
-const UserProfileResponse = z.object({
-	id: z.uuid().openapi({ example: "123e4567-e89b-12d3-a456-426614174000" }),
-	name: z.string().openapi({ example: "André Ximenes" }),
-	email: z.email().openapi({ example: "andre@exemplo.com" }),
-	createdAt: z.iso.datetime().openapi({ example: "2026-02-01T10:00:00Z" }),
-	updatedAt: z.iso.datetime().openapi({ example: "2026-02-05T15:30:00Z" }),
-});
+import { UserSchema } from "@/modules/shared/schemas/user";
 
 export const MeRoute = createRoute({
 	method: "get",
@@ -26,7 +19,7 @@ export const MeRoute = createRoute({
 			description: "Perfil do usuário",
 			content: {
 				"application/json": {
-					schema: UserProfileResponse,
+					schema: UserSchema,
 				},
 			},
 		},

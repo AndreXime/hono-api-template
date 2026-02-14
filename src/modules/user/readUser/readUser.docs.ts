@@ -1,22 +1,8 @@
 import { createRoute, z } from "@hono/zod-openapi";
 import auth from "@/middlewares/auth";
+import { PaginationMetaSchema } from "@/modules/shared/schemas/pagination";
+import { UserSchema } from "@/modules/shared/schemas/user";
 import { createPaginationSchema } from "@/modules/shared/utils/generatePaginationQuery";
-
-const UserResponseSchema = z.object({
-	id: z.string().openapi({ example: "123e4567-e89b-12d3-a456-426614174000" }),
-	name: z.string().openapi({ example: "André Ximenes" }),
-	email: z.email().openapi({ example: "andre@exemplo.com" }),
-	role: z.enum(["ADMIN", "CUSTOMER", "SUPPORT"]).openapi({ example: "CUSTOMER" }),
-	createdAt: z.iso.datetime().openapi({ example: "2026-02-01T10:00:00Z" }),
-	updatedAt: z.iso.datetime().openapi({ example: "2026-02-05T15:30:00Z" }),
-});
-
-const PaginationMetaSchema = z.object({
-	page: z.number().openapi({ example: 1 }),
-	limit: z.number().openapi({ example: 10 }),
-	total: z.number().openapi({ example: 50 }),
-	totalPages: z.number().openapi({ example: 5 }),
-});
 
 const RequestQuerySchema = createPaginationSchema(["name", "email", "createdAt"]);
 
@@ -41,7 +27,7 @@ export const ReadUserRoute = createRoute({
 			content: {
 				"application/json": {
 					schema: z.object({
-						data: z.array(UserResponseSchema),
+						data: z.array(UserSchema),
 						meta: PaginationMetaSchema,
 					}),
 				},
