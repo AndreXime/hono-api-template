@@ -11,9 +11,11 @@
 		"verbatimModuleSyntax": true,
 		"noEmit": true,
 
+		"types": ["bun"],
 		"paths": {
 			"@/*": ["./src/*"],
 			"prisma": ["./src/database/client/client"]
 		}
-	}
+	},
+	"exclude": ["node_modules", ".husky", ".vscode", "prisma"]
 }
