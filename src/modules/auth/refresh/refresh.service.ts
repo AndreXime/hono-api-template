@@ -28,7 +28,7 @@ export async function generateRefreshTokens(refreshTokenRaw: string) {
 
 	if (!user) throw new HTTPException(401, { message: "Usuário não encontrado" });
 
-	const newTokens = await generateAuthTokens(user.id, user.email, user.name);
+	const newTokens = await generateAuthTokens(user.id, user.email, user.name, user.role);
 
 	return newTokens;
 }

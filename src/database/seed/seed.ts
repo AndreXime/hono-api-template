@@ -1,4 +1,4 @@
-import { hashPassword } from "@/modules/auth/auth.service";
+import { hashPassword } from "@/modules/auth/shared/hash";
 import type { Prisma } from "../client/client";
 import { database } from "../database";
 
