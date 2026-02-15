@@ -1,6 +1,6 @@
 import { createRoute } from "@hono/zod-openapi";
 import auth from "@/middlewares/auth";
-import { UserSchema } from "@/modules/shared/schemas/user";
+import { MeResponseSchema } from "./me.schema";
 
 export const MeRoute = createRoute({
 	method: "get",
@@ -19,7 +19,7 @@ export const MeRoute = createRoute({
 			description: "Perfil do usuário",
 			content: {
 				"application/json": {
-					schema: UserSchema,
+					schema: MeResponseSchema,
 				},
 			},
 		},

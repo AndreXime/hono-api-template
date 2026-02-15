@@ -1,5 +1,5 @@
 import { createRoute } from "@hono/zod-openapi";
-import { SchemaSignIn, SchemaSignInResponse } from "./login.schema";
+import { LoginRequestSchema, LoginResponseSchema } from "./login.schema";
 
 export const LoginRoute = createRoute({
 	method: "post",
@@ -11,7 +11,7 @@ export const LoginRoute = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema: SchemaSignIn,
+					schema: LoginRequestSchema,
 				},
 			},
 			description: "Credenciais do usuário",
@@ -23,7 +23,7 @@ export const LoginRoute = createRoute({
 			description: "Login realizado com sucesso",
 			content: {
 				"application/json": {
-					schema: SchemaSignInResponse,
+					schema: LoginResponseSchema,
 				},
 			},
 		},

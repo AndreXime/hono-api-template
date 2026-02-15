@@ -1,4 +1,5 @@
-import { createRoute, z } from "@hono/zod-openapi";
+import { createRoute } from "@hono/zod-openapi";
+import { LogoutResponseSchema } from "./logout.schema";
 
 export const LogoutRoute = createRoute({
 	method: "post",
@@ -11,9 +12,7 @@ export const LogoutRoute = createRoute({
 			description: "Logout realizado com sucesso",
 			content: {
 				"application/json": {
-					schema: z.object({
-						message: z.string().openapi({ example: "Logout com sucesso" }),
-					}),
+					schema: LogoutResponseSchema,
 				},
 			},
 		},

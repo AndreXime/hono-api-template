@@ -1,5 +1,5 @@
 import { createRoute } from "@hono/zod-openapi";
-import { RegisterResponseSchema, RegisterUserSchema } from "./register.schema";
+import { RegisterRequestSchema, RegisterResponseSchema } from "./register.schema";
 
 export const RegisterRoute = createRoute({
 	method: "post",
@@ -11,7 +11,7 @@ export const RegisterRoute = createRoute({
 		body: {
 			content: {
 				"application/json": {
-					schema: RegisterUserSchema,
+					schema: RegisterRequestSchema,
 				},
 			},
 			required: true,

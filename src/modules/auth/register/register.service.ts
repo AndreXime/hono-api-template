@@ -3,9 +3,9 @@ import { database } from "@/database/database";
 import { sendEmail } from "@/lib/queue";
 import { hashPassword } from "@/modules/auth/shared/hash";
 import { generateAuthTokens } from "../shared/tokens";
-import type { RegisterUserSchema } from "./register.schema";
+import type { RegisterRequest } from "./register.schema";
 
-async function signUp(data: RegisterUserSchema) {
+async function signUp(data: RegisterRequest) {
 	const existingUser = await database.user.findUnique({
 		where: { email: data.email },
 		select: { id: true },

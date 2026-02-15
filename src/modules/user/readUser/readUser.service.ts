@@ -1,11 +1,8 @@
-import type { z } from "zod";
 import { database } from "@/database/database";
 import { getPaginationArgs } from "@/modules/shared/utils/generatePaginationQuery";
-import type { ReadUserRoute } from "./readUser.docs";
+import type { ReadUserRequestQuery } from "./readUser.schema";
 
-type QueryParams = z.infer<typeof ReadUserRoute.request.query>;
-
-export async function getAllUsers(query: QueryParams) {
+export async function getAllUsers(query: ReadUserRequestQuery) {
 	const args = getPaginationArgs(query, ["name", "email"]);
 
 	const [users, total] = await Promise.all([

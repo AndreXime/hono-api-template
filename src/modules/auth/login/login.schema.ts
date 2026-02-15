@@ -1,13 +1,13 @@
 import { z } from "@hono/zod-openapi";
-import { SchemaEmail, SchemaPassword } from "@/modules/shared/schemas/user";
+import { UserSchema } from "@/modules/shared/schemas/user";
 
-export const SchemaSignIn = z.object({
-	email: SchemaEmail,
-	password: SchemaPassword,
+export const LoginRequestSchema = UserSchema.pick({
+	email: true,
+	password: true,
 });
 
-export const SchemaSignInResponse = z.object({
-	message: z.string().openapi({ example: "Login com sucesso [LOG]" }),
+export const LoginResponseSchema = z.object({
+	message: z.string().openapi({ example: "Login com sucesso" }),
 });
 
-export type UserSignIn = z.infer<typeof SchemaSignIn>;
+export type LoginRequest = z.infer<typeof LoginRequestSchema>;
