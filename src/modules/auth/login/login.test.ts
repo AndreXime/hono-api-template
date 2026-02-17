@@ -47,13 +47,13 @@ describe("POST /auth/login", () => {
 		expect(res.status).toBe(401);
 	});
 
-	test("Deve rejeitar utilizador inexistente (404)", async () => {
+	test("Deve rejeitar utilizador inexistente (401)", async () => {
 		const res = await app.request("/auth/login", {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ email: "ghost@example.com", password }),
 		});
 
-		expect(res.status).toBe(404);
+		expect(res.status).toBe(401);
 	});
 });
