@@ -22,7 +22,6 @@ async function signUp(data: RegisterRequest) {
 			name: data.name,
 			email: data.email,
 			password: passwordHash,
-			role: "ADMIN",
 		},
 	});
 
