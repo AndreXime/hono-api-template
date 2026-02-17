@@ -50,6 +50,46 @@ O fluxo de requisição passa por uma cadeia estrita de verificações:
 
 ---
 
+## 🚀 Como Iniciar o Projeto
+
+### 1. Configurar Variáveis de Ambiente
+
+Copie o arquivo `.env.example` para `.env`:
+
+```bash
+cp .env.example .env
+```
+
+### 2. Iniciar Serviços com Docker Compose
+
+Inicie todos os serviços necessários (PostgreSQL, Redis, LocalStack):
+
+```bash
+docker compose up -d
+```
+
+### 3. Instalar Dependências
+
+```bash
+bun install
+```
+
+### 4. Executar Migrações do Prisma
+
+```bash
+bunx prisma migrate dev
+```
+
+### 5. Iniciar Servidor de Desenvolvimento
+
+```bash
+bun dev
+```
+
+A API estará disponível em `http://localhost:3000` e a documentação em `http://localhost:3000/docs`.
+
+---
+
 ## 📂 Estrutura do Projeto
 
 ```bash
@@ -64,6 +104,15 @@ src/
 │   └── shared/      # Utilitários partilhados (Schemas, Paginação)
 └── index.ts         # Ponto de entrada da aplicação
 ```
+
+---
+
+## 📚 Guias e Padrões
+
+Para garantir consistência e qualidade do código, consulte:
+
+* **[PATTERNS.md](./PATTERNS.md)** - Estrutura obrigatória dos 5 arquivos por ação, padrões de nomenclatura e reutilização de schemas
+* **[MIDDLEWARES.md](./MIDDLEWARES.md)** - Pipeline completo de processamento de requests e ordem de execução
 
 ## Testes
 

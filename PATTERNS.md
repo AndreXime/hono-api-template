@@ -2,19 +2,34 @@
 
 ## Estrutura de Módulos
 
-### Schema Files
-Toda ação dentro de `src/modules` deve ter um arquivo `schema.ts` próprio.
+### Os 5 Arquivos Obrigatórios por Ação
 
-**Estrutura:**
+**É fortemente recomendado que cada ação tenha exatamente 5 arquivos:**
+
 ```
-src/modules/
-  auth/
-    login/
-      login.schema.ts
-      login.docs.ts
-      login.controller.ts
-      login.service.ts
+src/modules/{módulo}/{ação}/
+  ├── {ação}.schema.ts      # Schemas Zod e tipos
+  ├── {ação}.docs.ts        # Definição OpenAPI
+  ├── {ação}.controller.ts  # Handler da rota
+  ├── {ação}.service.ts     # Lógica de negócio
+  └── {ação}.test.ts        # Testes unitários
 ```
+
+**Exemplo completo:**
+```
+src/modules/auth/login/
+  ├── login.schema.ts
+  ├── login.docs.ts
+  ├── login.controller.ts
+  ├── login.service.ts
+  └── login.test.ts
+```
+
+Esta estrutura garante:
+- **Separação clara de responsabilidades**
+- **Testabilidade** (testes isolados)
+- **Manutenibilidade** (fácil localizar e modificar código)
+- **Consistência** em todo o projeto
 
 ### Separação de Schemas
 
